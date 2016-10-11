@@ -1,0 +1,4 @@
+hug
+gensim
+nltk
+toml

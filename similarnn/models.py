@@ -1,0 +1,24 @@
+import gensim
+import nltk
+
+
+class LDAModel():
+    def __init__(self, lda_path, dictionary, corpus):
+        self.dictionary = dictionary
+        self.corpus = corpus
+        self.lda = gensim.models.ldamodel.LdaModel.load(lda_path)
+
+    @property
+    def num_topics(self):
+        return self.lda.num_topics
+
+    def infer_topics(self, document):
+        bow = doc2bow(self.dictionary, document)
+        sparse_topics = self.lda.get_document_topics(bow)
+        return gensim.matutils.sparse2full(sparse_topics, self.num_topics)
+
+
+def doc2bow(dictionary, document):
+    text = " ".join(document.values())
+    words = nltk.word_tokenize(text)
+    return dictionary.doc2bow(words)
