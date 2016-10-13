@@ -8,8 +8,8 @@ def test_lda_model():
     corpus = gensim.corpora.MmCorpus("tests/data/model/corpus.mm")
     model = models.LDAModel("tests/data/model/lda/model", dictionary, corpus)
 
-    assert model.num_topics == 10
-    assert len(model.infer_topics({"body": "carne panela"})) == 10
+    assert 10 == model.num_topics
+    assert 10 == len(model.infer_topics({"body": "carne panela"}))
 
 
 def test_doc2bow():
@@ -21,6 +21,6 @@ def test_doc2bow():
     }
     bow = dict(models.doc2bow(dictionary, document))
     words2ids = {v: k for k, v in dictionary.items()}
-    assert len(bow) == 2
-    assert bow[words2ids["frango"]] == 2
-    assert bow[words2ids["arroz"]] == 1
+    assert 2 == len(bow)
+    assert 2 == bow[words2ids["frango"]]
+    assert 1 == bow[words2ids["arroz"]]

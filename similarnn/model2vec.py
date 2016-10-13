@@ -5,7 +5,7 @@ import os
 from similarnn.config import load_config
 
 
-config = load_config(os.environ.get("CONFIG_PATH", "config.yaml"))
+config = load_config(os.environ.get("CONFIG_PATH", "config.toml"))
 
 
 def validate_model(f):

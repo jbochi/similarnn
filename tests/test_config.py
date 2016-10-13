@@ -11,8 +11,8 @@ def test_load_dictionaries():
                 "path": "tests/data/model/dictionary.dict"
             }
         }})
-    assert list(dictionaries.keys()) == ["mydict"]
-    assert type(dictionaries["mydict"]) == gensim.corpora.dictionary.Dictionary
+    assert ["mydict"] == list(dictionaries.keys())
+    assert gensim.corpora.dictionary.Dictionary == type(dictionaries["mydict"])
 
 
 def test_load_corpora():
@@ -22,8 +22,8 @@ def test_load_corpora():
                 "path": "tests/data/model/corpus.mm"
             }
         }})
-    assert list(corpora.keys()) == ["corpus"]
-    assert type(corpora["corpus"]) == gensim.corpora.mmcorpus.MmCorpus
+    assert ["corpus"] == list(corpora.keys())
+    assert gensim.corpora.mmcorpus.MmCorpus == type(corpora["corpus"])
 
 
 def test_load_models():
@@ -42,10 +42,10 @@ def test_load_models():
                 "corpus": "mycorpus"
     }}}
     loaded_models  = config.load_models(test_config)
-    assert list(loaded_models.keys()) == ["model"]
-    assert type(loaded_models["model"]) == models.LDAModel
+    assert ["model"] == list(loaded_models.keys())
+    assert models.LDAModel == type(loaded_models["model"])
 
 
 def test_load_config():
     loaded_config = config.load_config("tests/data/config.toml")
-    assert type(loaded_config['models']['lda']) == models.LDAModel
+    assert models.LDAModel == type(loaded_config['models']['lda'])
