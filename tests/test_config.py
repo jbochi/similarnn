@@ -1,6 +1,8 @@
+import gensim
+
 from similarnn import config
 from similarnn import models
-import gensim
+
 
 def test_load_dictionaries():
     dictionaries = config.load_dictionaries({
