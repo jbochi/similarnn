@@ -2,3 +2,4 @@ hug
 gensim
 nltk
 toml
+annoy
