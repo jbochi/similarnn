@@ -1,13 +1,13 @@
 [dictionaries]
   [dictionaries.default_dictionary]
-  path = "tests/fixture/model/dictionary.dict"
+  path = "tests/data/model/dictionary.dict"
 
 [corpora]
   [corpora.default_corpus]
-  path = "tests/fixture/model/corpus.mm"
+  path = "tests/data/model/corpus.mm"
 
 [models]
   [models.lda]
-  path = "tests/fixture/model/lda/model"
+  path = "tests/data/model/lda/model"
   dictionary = "default_dictionary"
   corpus = "default_corpus"
