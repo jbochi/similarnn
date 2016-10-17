@@ -24,7 +24,7 @@ def load_models(config):
         path = attributes['path']
         dictionary = config['dictionaries'][attributes['dictionary']]
         corpus = config['corpora'][attributes['corpus']]
-        models[model] = LDAModel(path, dictionary, corpus)
+        models[model] = LDAModel(model, path, dictionary, corpus)
     return models
 
 

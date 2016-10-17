@@ -3,15 +3,18 @@ from annoy import AnnoyIndex
 
 class NearestNeighbours():
     def __init__(self, num_factors, n_trees=10):
+        self.clean()
+        self.num_factors = num_factors
+        self.n_trees = n_trees
+
+    def clean(self):
         self.vectors = []
         self.key_from_id = {}
         self.id_from_key = {}
         self.index = None
-        self.num_factors = num_factors
-        self.n_trees = n_trees
 
-    def add_vector(self, key, vector):
-        "Add or update vector"
+    def add_item(self, key, vector):
+        "Add or update item"
         if key in self.id_from_key:
             self._update_vector(key, vector)
         else:
@@ -28,6 +31,13 @@ class NearestNeighbours():
         print(items)
         return [(self.key_from_id[item], distance) for item, distance in
             zip(items, cosine_distances) if item != item_id][:k]
+
+    @property
+    def n_items(self):
+        return len(self.vectors)
+
+    def item_vector(self, key):
+        return self.vectors[self.id_from_key[key]]
 
     def _euclidean_from_cosine_distance(self, distance):
         # Annoy uses Euclidean distance of normalized vectors for its angular

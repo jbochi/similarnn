@@ -6,7 +6,7 @@ def test_lda_model():
     dictionary = gensim.corpora.Dictionary.load_from_text(
         "tests/data/model/dictionary.dict")
     corpus = gensim.corpora.MmCorpus("tests/data/model/corpus.mm")
-    model = models.LDAModel("tests/data/model/lda/model", dictionary, corpus)
+    model = models.LDAModel("lda", "tests/data/model/lda/model", dictionary, corpus)
 
     assert 10 == model.num_topics
     assert 10 == len(model.infer_topics({"body": "carne panela"}))

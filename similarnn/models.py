@@ -3,7 +3,8 @@ import nltk
 
 
 class LDAModel():
-    def __init__(self, lda_path, dictionary, corpus):
+    def __init__(self, name, lda_path, dictionary, corpus):
+        self.name = name
         self.dictionary = dictionary
         self.corpus = corpus
         self.lda = gensim.models.ldamodel.LdaModel.load(lda_path)
