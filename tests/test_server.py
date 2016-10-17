@@ -85,3 +85,17 @@ def test_get_document():
     assert 1 == len(response.data['similar'])
     assert 'doc2' == response.data['similar'][0]['key']
     assert 0 == response.data['similar'][0]['distance']
+
+
+def test_delete_documents():
+    topics = np.array(range(10))
+    db = get_model_db(server.config['models']['lda'])
+    db.clean()
+    db.add_item("doc1", topics)
+    db.add_item("doc2", topics)
+
+    assert db.n_items == 2
+
+    response = hug.test.delete(server, 'models/lda/documents')
+    assert '200 OK' == response.status
+    assert db.n_items == 0

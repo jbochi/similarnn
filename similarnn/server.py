@@ -1,6 +1,6 @@
+from functools import wraps
 import hug
 import json
-import codecs
 import os
 
 from similarnn.config import load_config
@@ -11,6 +11,7 @@ config = load_config(os.environ.get("CONFIG_PATH", "config.toml"))
 
 
 def validate_model(f):
+    @wraps(f)
     def wrap(model, response, **kwargs):
         if model not in config['models']:
             response.status = hug.HTTP_NOT_FOUND
@@ -33,11 +34,19 @@ def num_topics(model, response, **kwargs):
 @validate_model
 def create_document(model, response, **kwargs):
     """Adds document and returns the number of topics in a model"""
-    document=kwargs
+    document = kwargs
     vector = model.infer_topics(document=document)
     storage = get_model_db(model)
     storage.add_item(document['id'], vector)
     return vector.tolist()
+
+
+@hug.delete('/models/{model}/documents')
+@validate_model
+def delete_documents(model, response, **kwargs):
+    """Removes all documents"""
+    storage = get_model_db(model)
+    storage.clean()
 
 
 @hug.get('/models/{model}/documents/{document_id}')
@@ -46,7 +55,7 @@ def get_document(model, response, document_id):
     """Get document vector"""
     storage = get_model_db(model)
     try:
-        vector = storage.item_vector(document_id)
+        vector = storage.item_vector(str(document_id))
         return vector.tolist()
     except KeyError:
         response.status = hug.HTTP_NOT_FOUND

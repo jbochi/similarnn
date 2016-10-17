@@ -8,7 +8,7 @@ def close(a, b, tol=1e-3):
 
 
 def test_n_items():
-    space = ann.NearestNeighbours(num_factors=2)
+    space = ann.NearestNeighbours(n_factors=2)
     assert 0 == space.n_items
 
     space.add_item("doc1", [0, 1])
@@ -18,7 +18,7 @@ def test_n_items():
 
 
 def test_clean():
-    space = ann.NearestNeighbours(num_factors=2)
+    space = ann.NearestNeighbours(n_factors=2)
     space.add_item("doc1", [0, 1])
     space.add_item("doc2", [1, 0])
     space.add_item("doc3", [1, 1])
@@ -27,13 +27,13 @@ def test_clean():
 
 
 def test_item_vector():
-    space = ann.NearestNeighbours(num_factors=2)
+    space = ann.NearestNeighbours(n_factors=2)
     space.add_item("doc1", [0, 1])
     assert [0, 1] == space.item_vector("doc1")
 
 
 def test_knn():
-    space = ann.NearestNeighbours(num_factors=2)
+    space = ann.NearestNeighbours(n_factors=2)
     space.add_item("doc1", [0, 1])
     space.add_item("doc2", [1, 0])
     space.add_item("doc3", [1, 1])
@@ -43,7 +43,7 @@ def test_knn():
 
 
 def test_knn_45_degrees():
-    space = ann.NearestNeighbours(num_factors=2)
+    space = ann.NearestNeighbours(n_factors=2)
     space.add_item("doc1", [0, 1])
     space.add_item("doc2", [1, 0])
     space.add_item("doc3", [0.5, 0.5])
@@ -57,7 +57,7 @@ def test_knn_45_degrees():
 
 
 def test_knn_90_degrees():
-    space = ann.NearestNeighbours(num_factors=2)
+    space = ann.NearestNeighbours(n_factors=2)
     space.add_item("doc1", [0, 1])
     space.add_item("doc2", [1, 0])
 
@@ -70,7 +70,7 @@ def test_knn_90_degrees():
 
 
 def test_knn_0_degrees():
-    space = ann.NearestNeighbours(num_factors=2)
+    space = ann.NearestNeighbours(n_factors=2)
     space.add_item("doc1", [0, 1])
     space.add_item("doc2", [0, 1])
 

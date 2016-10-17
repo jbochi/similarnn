@@ -2,9 +2,9 @@ from annoy import AnnoyIndex
 
 
 class NearestNeighbours():
-    def __init__(self, num_factors, n_trees=10):
+    def __init__(self, n_factors, n_trees=10):
         self.clean()
-        self.num_factors = num_factors
+        self.n_factors = n_factors
         self.n_trees = n_trees
 
     def clean(self):
@@ -45,7 +45,7 @@ class NearestNeighbours():
         return (distance ** 2) / 2
 
     def _rebuild_index(self):
-        index = AnnoyIndex(self.num_factors, metric='angular')
+        index = AnnoyIndex(self.n_factors, metric='angular')
         for i, vector in enumerate(self.vectors):
             index.add_item(i, vector)
         index.build(self.n_trees)

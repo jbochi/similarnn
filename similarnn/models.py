@@ -20,6 +20,6 @@ class LDAModel():
 
 
 def doc2bow(dictionary, document):
-    text = " ".join(document.values())
+    text = " ".join(v for k, v in document.items() if k != 'id')
     words = nltk.word_tokenize(text)
     return dictionary.doc2bow(words)

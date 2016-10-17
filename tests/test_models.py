@@ -16,6 +16,7 @@ def test_doc2bow():
     dictionary = gensim.corpora.Dictionary.load_from_text(
         "tests/data/model/dictionary.dict")
     document = {
+        "id": "frango",
         "body": "frango com arroz",
         "title": "frango delicioso"
     }
