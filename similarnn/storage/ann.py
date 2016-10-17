@@ -13,6 +13,10 @@ class NearestNeighbours():
         self.id_from_key = {}
         self.index = None
 
+    @property
+    def n_items(self):
+        return len(self.vectors)
+
     def add_item(self, key, vector):
         "Add or update item"
         if key in self.id_from_key:
@@ -31,10 +35,6 @@ class NearestNeighbours():
         print(items)
         return [(self.key_from_id[item], distance) for item, distance in
             zip(items, cosine_distances) if item != item_id][:k]
-
-    @property
-    def n_items(self):
-        return len(self.vectors)
 
     def item_vector(self, key):
         return self.vectors[self.id_from_key[key]]
