@@ -6,6 +6,7 @@ from similarnn import ann
 def close(a, b, tol=1e-3):
     return abs(a - b) < tol
 
+
 def test_knn():
     space = ann.NearestNeighbours(num_factors=2)
     space.add_vector("doc1", [0, 1])

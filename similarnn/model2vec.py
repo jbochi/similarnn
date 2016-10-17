@@ -27,7 +27,7 @@ def num_topics(model, response, **kwargs):
     return "This model has {num_topics} topics".format(num_topics=model.num_topics)
 
 
-@hug.put('/models/{model}/infer_topics')
+@hug.put('/models/{model}/topics')
 @validate_model
 def infer_topics(model, response, **kwargs):
     """Returns the number of topics in a model"""

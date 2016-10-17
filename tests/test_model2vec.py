@@ -25,18 +25,18 @@ def test_num_topics():
     assert 'This model has 10 topics' == response.data
 
 
-def test_infer_topics_method_not_allowed():
+def test_topics_method_not_allowed():
     assert '405 Method Not Allowed' == \
-        hug.test.get(model2vec, "models/invalidmodel/infer_topics").status
+        hug.test.get(model2vec, "models/invalidmodel/topics").status
 
 
-def test_infer_topics_model_not_found():
+def test_topics_model_not_found():
     assert '404 Not Found' == \
-        hug.test.put(model2vec, "models/invalidmodel/infer_topics").status
+        hug.test.put(model2vec, "models/invalidmodel/topics").status
 
 
-def test_infer_topics():
-    url = "models/lda/infer_topics"
+def test_topics():
+    url = "models/lda/topics"
     document = {"body": "frango"}
     response = hug.test.put(model2vec, url, body=document)
     assert '200 OK' == response.status
