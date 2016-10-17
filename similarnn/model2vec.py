@@ -42,7 +42,7 @@ def create_document(model, response, **kwargs):
 
 @hug.get('/models/{model}/documents/{document_id}')
 @validate_model
-def create_document(model, response, document_id):
+def get_document(model, response, document_id):
     """Get document vector"""
     storage = get_model_db(model)
     try:
