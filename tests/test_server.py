@@ -62,7 +62,7 @@ def test_get_document(db):
     assert np.allclose(topics, response.data, rtol=1e-3)
 
 
-def test_get_document_404():
+def test_get_similar_documents_404():
     response = hug.test.get(server, 'models/lda/documents/doc2/similar')
     assert '404 Not Found' == response.status
 
