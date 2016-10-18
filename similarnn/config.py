@@ -7,7 +7,8 @@ from similarnn.models import LDAModel
 def load_dictionaries(config):
     dictionaries = {}
     for name, attributes in config["dictionaries"].items():
-        dictionaries[name] = gensim.corpora.Dictionary.load_from_text(attributes['path'])
+        path = attributes['path']
+        dictionaries[name] = gensim.corpora.Dictionary.load_from_text(path)
     return dictionaries
 
 

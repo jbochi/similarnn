@@ -16,7 +16,7 @@ class NearestNeighbours():
 
     @property
     def n_items(self):
-        "Returns the ammount of storage itens"
+        "Returns the ammount of storage items"
         return len(self.vectors)
 
     def add_item(self, key, vector):
@@ -31,8 +31,8 @@ class NearestNeighbours():
         "Removes item"
         item_id = self.id_from_key[key]
         del self.key_from_id[item_id]
-        new_ids = [(i, key) for i, (old_id, key) in
-            enumerate(sorted(self.key_from_id.items()))]
+        new_ids = [(i, key) for i, (old_id, key) in enumerate(
+            sorted(self.key_from_id.items()))]
         self.vectors.pop(item_id)
         self.id_from_key = dict((key, new_id) for new_id, key in new_ids)
         self.key_from_id = dict(new_ids)
@@ -42,29 +42,26 @@ class NearestNeighbours():
         "Returns K nearest neighbours from item"
         item_id = self.id_from_key[key]
         items, distances = self.index.get_nns_by_item(item_id,
-            n=k + 1,
-            include_distances=True)
-        return [(item, distance) for item, distance in
-            self._get_itens_keys_and_cosine_distances(items, distances)
-            if item != key][:k]
+                                                      n=k + 1,
+                                                      include_distances=True)
+        key_dists = self._get_items_keys_and_cosine_distances(items, distances)
+        return [(k, d) for k, d in key_dists if k != key][:k]
 
     def vector_knn(self, vector, k=10):
         "Returns K nearest neighbours from vector"
         items, distances = self.index.get_nns_by_vector(vector,
-            n=k,
-            include_distances=True
-        )
-        cosine_distances = map(self._euclidean_from_cosine_distance, distances)
-        return self._get_itens_keys_and_cosine_distances(items, distances)
+                                                        n=k,
+                                                        include_distances=True)
+        return self._get_items_keys_and_cosine_distances(items, distances)
 
     def item_vector(self, key):
         "Returns item vector"
         return self.vectors[self.id_from_key[key]]
 
-    def _get_itens_keys_and_cosine_distances(self, items, distances):
+    def _get_items_keys_and_cosine_distances(self, items, distances):
         cosine_distances = map(self._euclidean_from_cosine_distance, distances)
-        return [(self.key_from_id[item], distance) for item, distance in
-            zip(items, cosine_distances)]
+        zipped = zip(items, cosine_distances)
+        return [(self.key_from_id[i], d) for i, d in zipped]
 
     def _euclidean_from_cosine_distance(self, distance):
         # Annoy uses Euclidean distance of normalized vectors for its angular

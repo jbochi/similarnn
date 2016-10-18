@@ -2,6 +2,7 @@ from similarnn.storage.ann import NearestNeighbours
 
 storage = {}
 
+
 def get_model_db(model):
     global storage
     if model.name in storage:

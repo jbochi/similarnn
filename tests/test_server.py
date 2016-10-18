@@ -1,14 +1,15 @@
-import falcon
 import hug
 import numpy as np
 import os
 import pytest
 
-os.environ['CONFIG_PATH'] = 'tests/data/config.toml'
-
-
-from similarnn import server
 from similarnn.storage import get_model_db
+
+try:
+    os.environ['CONFIG_PATH'] = 'tests/data/config.toml'
+    from similarnn import server
+except:
+    raise
 
 
 @pytest.fixture

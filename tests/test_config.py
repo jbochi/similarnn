@@ -12,7 +12,8 @@ def test_load_dictionaries():
             }
         }})
     assert ["mydict"] == list(dictionaries.keys())
-    assert gensim.corpora.dictionary.Dictionary == type(dictionaries["mydict"])
+    assert isinstance(dictionaries["mydict"],
+                      gensim.corpora.dictionary.Dictionary)
 
 
 def test_load_corpora():
@@ -23,7 +24,8 @@ def test_load_corpora():
             }
         }})
     assert ["corpus"] == list(corpora.keys())
-    assert gensim.corpora.mmcorpus.MmCorpus == type(corpora["corpus"])
+    assert isinstance(corpora["corpus"],
+                      gensim.corpora.mmcorpus.MmCorpus)
 
 
 def test_load_models():
@@ -39,13 +41,12 @@ def test_load_models():
             "model": {
                 "path": "tests/data/model/lda/model",
                 "dictionary": "mydictionary",
-                "corpus": "mycorpus"
-    }}}
-    loaded_models  = config.load_models(test_config)
+                "corpus": "mycorpus"}}}
+    loaded_models = config.load_models(test_config)
     assert ["model"] == list(loaded_models.keys())
-    assert models.LDAModel == type(loaded_models["model"])
+    assert isinstance(loaded_models["model"], models.LDAModel)
 
 
 def test_load_config():
     loaded_config = config.load_config("tests/data/config.toml")
-    assert models.LDAModel == type(loaded_config['models']['lda'])
+    assert isinstance(loaded_config['models']['lda'], models.LDAModel)

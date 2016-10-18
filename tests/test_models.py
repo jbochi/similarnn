@@ -1,20 +1,25 @@
 import gensim
+import pytest
 
 from similarnn import models
 
-def test_lda_model():
-    dictionary = gensim.corpora.Dictionary.load_from_text(
-        "tests/data/model/dictionary.dict")
+
+@pytest.fixture
+def dictionary():
+    path = "tests/data/model/dictionary.dict"
+    return gensim.corpora.Dictionary.load_from_text(path)
+
+
+def test_lda_model(dictionary):
     corpus = gensim.corpora.MmCorpus("tests/data/model/corpus.mm")
-    model = models.LDAModel("lda", "tests/data/model/lda/model", dictionary, corpus)
+    lda_path = "tests/data/model/lda/model"
+    model = models.LDAModel("lda", lda_path, dictionary, corpus)
 
     assert 10 == model.num_topics
     assert 10 == len(model.infer_topics({"body": "carne panela"}))
 
 
-def test_doc2bow():
-    dictionary = gensim.corpora.Dictionary.load_from_text(
-        "tests/data/model/dictionary.dict")
+def test_doc2bow(dictionary):
     document = {
         "id": "frango",
         "body": "frango com arroz",

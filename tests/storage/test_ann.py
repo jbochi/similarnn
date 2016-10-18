@@ -4,7 +4,6 @@ import pytest
 from similarnn.storage import ann
 
 
-
 def close(a, b, tol=1e-3):
     return abs(a - b) < tol
 

@@ -1,6 +1,5 @@
 from functools import wraps
 import hug
-import json
 import os
 
 from similarnn.config import load_config
@@ -27,7 +26,7 @@ def validate_model(f):
 @validate_model
 def num_topics(model, response, **kwargs):
     """Returns the number of topics in a model"""
-    return { "topics":  model.num_topics }
+    return {"topics":  model.num_topics}
 
 
 @hug.post('/models/{model}/documents')
@@ -55,7 +54,7 @@ def vector_knn_documents(model, response, **kwargs):
     """Get vector KNN documents"""
     storage = get_model_db(model)
     if 'vector' not in kwargs:
-        return  {}
+        return {}
     vector = map(float, kwargs['vector'].split(","))
     return _similar_json(storage.vector_knn(vector))
 
@@ -71,8 +70,8 @@ def get_document(model, response, document_id):
     except KeyError:
         response.status = hug.HTTP_NOT_FOUND
         return {
-            "error": "Document {document_id} not found".format(document_id=document_id)
-        }
+            "error": "Document {document_id} not found".format(
+                document_id=document_id)}
 
 
 @hug.delete('/models/{model}/documents/{document_id}')
@@ -81,12 +80,12 @@ def delete_document(model, response, document_id):
     """Removes document by id"""
     storage = get_model_db(model)
     try:
-        vector = storage.remove_item(str(document_id))
+        storage.remove_item(str(document_id))
     except KeyError:
         response.status = hug.HTTP_NOT_FOUND
         return {
-            "error": "Document {document_id} not found".format(document_id=document_id)
-        }
+            "error": "Document {document_id} not found".format(
+                document_id=document_id)}
 
 
 @hug.get('/models/{model}/documents/{document_id}/similar')
@@ -99,12 +98,12 @@ def similar_documents(model, response, document_id):
     except KeyError:
         response.status = hug.HTTP_NOT_FOUND
         return {
-            "error": "Document {document_id} not found".format(document_id=document_id)
-        }
+            "error": "Document {document_id} not found".format(
+                document_id=document_id)}
 
 
 def _similar_json(items):
-    return {
-        "similar": [{"key": key, "distance": distance}
-            for key, distance in items]
-    }
+    return {"similar": [{
+        "key": key,
+        "distance": distance
+    } for key, distance in items]}
