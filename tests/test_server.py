@@ -1,13 +1,21 @@
 import falcon
 import hug
-import os
 import numpy as np
+import os
+import pytest
 
 os.environ['CONFIG_PATH'] = 'tests/data/config.toml'
 
 
 from similarnn import server
 from similarnn.storage import get_model_db
+
+
+@pytest.fixture
+def db():
+    db = get_model_db(server.config['models']['lda'])
+    db.clean()
+    return db
 
 
 def test_num_topics_model_not_found():
@@ -50,10 +58,8 @@ def test_get_document_404():
     assert '404 Not Found' == response.status
 
 
-def test_get_document():
+def test_get_document(db):
     topics = np.array(range(10))
-    db = get_model_db(server.config['models']['lda'])
-    db.clean()
     db.add_item("doc1", topics)
 
     response = hug.test.get(server, 'models/lda/documents/doc1')
@@ -66,10 +72,8 @@ def test_get_document_404():
     assert '404 Not Found' == response.status
 
 
-def test_get_document():
+def test_get_document(db):
     topics = np.array(range(10))
-    db = get_model_db(server.config['models']['lda'])
-    db.clean()
     db.add_item("doc1", topics)
     db.add_item("doc2", topics)
 
@@ -81,10 +85,8 @@ def test_get_document():
     assert 0 == response.data['similar'][0]['distance']
 
 
-def test_delete_documents():
+def test_delete_documents(db):
     topics = np.array(range(10))
-    db = get_model_db(server.config['models']['lda'])
-    db.clean()
     db.add_item("doc1", topics)
     db.add_item("doc2", topics)
 
