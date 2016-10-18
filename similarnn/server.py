@@ -23,11 +23,11 @@ def validate_model(f):
     return wrap
 
 
-@hug.get('/models/{model}/num_topics')
+@hug.get('/models/{model}/topics')
 @validate_model
 def num_topics(model, response, **kwargs):
     """Returns the number of topics in a model"""
-    return "This model has {num_topics} topics".format(num_topics=model.num_topics)
+    return { "topics":  model.num_topics }
 
 
 @hug.post('/models/{model}/documents')

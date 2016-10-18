@@ -12,19 +12,13 @@ from similarnn.storage import get_model_db
 
 def test_num_topics_model_not_found():
     assert '404 Not Found' == \
-        hug.test.get(server, "models/invalidmodel/num_topics").status
+        hug.test.get(server, "models/invalidmodel/topics").status
 
 
-def test_num_topics():
-    assert '200 OK' == \
-        hug.test.get(server, "models/lda/num_topics").status
-
-
-def test_num_topics():
-    url = "models/lda/num_topics"
-    response = hug.test.get(server, url)
+def test_topics():
+    response = hug.test.get(server, "models/lda/topics")
     assert '200 OK' == response.status
-    assert 'This model has 10 topics' == response.data
+    assert 10 == response.data['topics']
 
 
 def test_post_documents_method_not_allowed():
