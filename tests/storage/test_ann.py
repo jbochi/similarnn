@@ -132,3 +132,16 @@ def test_remove_item_unknown():
     space = ann.NearestNeighbours(n_factors=2)
     with pytest.raises(KeyError):
         space.remove_item("doc2")
+
+
+def test_update_vector():
+    space = ann.NearestNeighbours(n_factors=2)
+    space.add_item("doc1", [0, 1])
+
+    space.add_item("doc2", [1, 0])
+    space.add_item("doc2", [0, 1])
+
+    assert [0, 1] == space.item_vector("doc2")
+    doc, distance = space.item_knn("doc1", k=2)[0]
+    assert "doc2" == doc
+    assert close(0, distance)
