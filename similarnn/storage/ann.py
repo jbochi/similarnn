@@ -25,6 +25,16 @@ class NearestNeighbours():
             self._add_new_vector(key, vector)
         self._rebuild_index()
 
+    def remove_item(self, key):
+        item_id = self.id_from_key[key]
+        del self.key_from_id[item_id]
+        new_ids = [(i, key) for i, (old_id, key) in
+            enumerate(sorted(self.key_from_id.items()))]
+        self.vectors.pop(item_id)
+        self.id_from_key = dict((key, new_id) for new_id, key in new_ids)
+        self.key_from_id = dict(new_ids)
+        self._rebuild_index()
+
     def item_knn(self, key, k=10):
         "K nearest neighbours from item"
         item_id = self.id_from_key[key]
@@ -32,7 +42,6 @@ class NearestNeighbours():
             n=k + 1,
             include_distances=True)
         cosine_distances = map(self._euclidean_from_cosine_distance, distances)
-        print(items)
         return [(self.key_from_id[item], distance) for item, distance in
             zip(items, cosine_distances) if item != item_id][:k]
 
