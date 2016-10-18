@@ -40,7 +40,7 @@ def test_item_vector_unknown():
         space.item_vector("doc2")
 
 
-def test_knn():
+def test_item_knn():
     space = ann.NearestNeighbours(n_factors=2)
     space.add_item("doc1", [0, 1])
     space.add_item("doc2", [1, 0])
@@ -50,7 +50,7 @@ def test_knn():
     assert ['doc3', 'doc2'] == docs
 
 
-def test_knn_45_degrees():
+def test_item_knn_45_degrees():
     space = ann.NearestNeighbours(n_factors=2)
     space.add_item("doc1", [0, 1])
     space.add_item("doc2", [1, 0])
@@ -64,7 +64,7 @@ def test_knn_45_degrees():
     assert close(1 - math.sqrt(2) / 2, distance)
 
 
-def test_knn_90_degrees():
+def test_item_knn_90_degrees():
     space = ann.NearestNeighbours(n_factors=2)
     space.add_item("doc1", [0, 1])
     space.add_item("doc2", [1, 0])
@@ -77,7 +77,7 @@ def test_knn_90_degrees():
     assert close(1, distance)
 
 
-def test_knn_0_degrees():
+def test_item_knn_0_degrees():
     space = ann.NearestNeighbours(n_factors=2)
     space.add_item("doc1", [0, 1])
     space.add_item("doc2", [0, 1])
@@ -88,6 +88,21 @@ def test_knn_0_degrees():
     similar_doc, distance = docs[0]
     assert 'doc2' == similar_doc
     assert close(0, distance)
+
+
+def test_vector_knn():
+    space = ann.NearestNeighbours(n_factors=2)
+    space.add_item("doc1", [-1, -1])
+    space.add_item("doc2", [1, 0])
+    space.add_item("doc3", [1, 1])
+
+    doc_and_distances = space.vector_knn([1, 1])
+    docs = [doc for doc, _ in doc_and_distances]
+    distances = [distance for _, distance in doc_and_distances]
+    assert ['doc3', 'doc2', 'doc1'] == docs
+    assert close(0, distances[0])
+    assert close(1 - math.sqrt(2) / 2, distances[1])
+    assert close(2, distances[2])
 
 
 def test_remove_item():
