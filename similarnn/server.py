@@ -37,13 +37,13 @@ def create_document(model, response, **kwargs):
     document = kwargs
     vector = model.infer_topics(document=document)
     storage = get_model_db(model)
-    storage.add_item(document['id'], vector)
+    storage.add_item(str(document['id']), vector)
     return vector.tolist()
 
 
 @hug.delete('/models/{model}/documents')
 @validate_model
-def delete_documents(model, response, **kwargs):
+def delete_all_documents(model, response, **kwargs):
     """Removes all documents"""
     storage = get_model_db(model)
     storage.clean()
@@ -55,8 +55,22 @@ def get_document(model, response, document_id):
     """Get document vector"""
     storage = get_model_db(model)
     try:
-        vector = storage.item_vector(str(document_id))
+        vector = storage.item_vector(document_id)
         return vector.tolist()
+    except KeyError:
+        response.status = hug.HTTP_NOT_FOUND
+        return {
+            "error": "Document {document_id} not found".format(document_id=document_id)
+        }
+
+
+@hug.delete('/models/{model}/documents/{document_id}')
+@validate_model
+def delete_document(model, response, document_id):
+    """Removes document by id"""
+    storage = get_model_db(model)
+    try:
+        vector = storage.remove_item(str(document_id))
     except KeyError:
         response.status = hug.HTTP_NOT_FOUND
         return {
@@ -66,7 +80,7 @@ def get_document(model, response, document_id):
 
 @hug.get('/models/{model}/documents/{document_id}/similar')
 @validate_model
-def get_document(model, response, document_id):
+def similar_documents(model, response, document_id):
     """Get similar documents"""
     storage = get_model_db(model)
     try:

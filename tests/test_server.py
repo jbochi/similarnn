@@ -85,7 +85,7 @@ def test_get_document(db):
     assert 0 == response.data['similar'][0]['distance']
 
 
-def test_delete_documents(db):
+def test_delete_all_documents(db):
     topics = np.array(range(10))
     db.add_item("doc1", topics)
     db.add_item("doc2", topics)
@@ -93,5 +93,18 @@ def test_delete_documents(db):
     assert db.n_items == 2
 
     response = hug.test.delete(server, 'models/lda/documents')
+    assert '200 OK' == response.status
+    assert db.n_items == 0
+
+
+def test_delete_document_404():
+    response = hug.test.delete(server, 'models/lda/documents/not_found')
+    assert '404 Not Found' == response.status
+
+
+def test_delete_document(db):
+    db.add_item("doc1", np.array(range(10)))
+
+    response = hug.test.delete(server, 'models/lda/documents/doc1')
     assert '200 OK' == response.status
     assert db.n_items == 0
