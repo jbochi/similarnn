@@ -29,11 +29,6 @@ def test_topics():
     assert 10 == response.data['topics']
 
 
-def test_post_documents_method_not_allowed():
-    assert '405 Method Not Allowed' == \
-        hug.test.get(server, "models/invalidmodel/documents").status
-
-
 def test_post_documents_model_not_found():
     assert '404 Not Found' == \
         hug.test.post(server, "models/invalidmodel/documents").status
@@ -72,7 +67,7 @@ def test_get_document_404():
     assert '404 Not Found' == response.status
 
 
-def test_get_document(db):
+def test_get_similar_documents(db):
     topics = np.array(range(10))
     db.add_item("doc1", topics)
     db.add_item("doc2", topics)
@@ -104,7 +99,21 @@ def test_delete_document_404():
 
 def test_delete_document(db):
     db.add_item("doc1", np.array(range(10)))
-
     response = hug.test.delete(server, 'models/lda/documents/doc1')
     assert '200 OK' == response.status
     assert db.n_items == 0
+
+
+def test_get_vector_knn_documents(db):
+    topics = np.array(range(10))
+    db.add_item("doc1", topics)
+
+    url = 'models/lda/documents'
+    querystring = {"vector": ",".join(map(str, topics))}
+    response = hug.test.get(server, url, querystring)
+
+    assert '200 OK' == response.status
+    assert ['similar'] == list(response.data.keys())
+    assert 1 == len(response.data['similar'])
+    assert 'doc1' == response.data['similar'][0]['key']
+    assert 0 == response.data['similar'][0]['distance']

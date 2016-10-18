@@ -49,6 +49,17 @@ def delete_all_documents(model, response, **kwargs):
     storage.clean()
 
 
+@hug.get('/models/{model}/documents')
+@validate_model
+def vector_knn_documents(model, response, **kwargs):
+    """Get vector KNN documents"""
+    storage = get_model_db(model)
+    if 'vector' not in kwargs:
+        return  {}
+    vector = map(float, kwargs['vector'].split(","))
+    return _similar_json(storage.vector_knn(vector))
+
+
 @hug.get('/models/{model}/documents/{document_id}')
 @validate_model
 def get_document(model, response, document_id):
@@ -84,13 +95,16 @@ def similar_documents(model, response, document_id):
     """Get similar documents"""
     storage = get_model_db(model)
     try:
-        similar = storage.item_knn(document_id)
-        return {
-            "similar": [{"key": key, "distance": distance}
-                for key, distance in similar]
-        }
+        return _similar_json(storage.item_knn(document_id))
     except KeyError:
         response.status = hug.HTTP_NOT_FOUND
         return {
             "error": "Document {document_id} not found".format(document_id=document_id)
         }
+
+
+def _similar_json(items):
+    return {
+        "similar": [{"key": key, "distance": distance}
+            for key, distance in items]
+    }

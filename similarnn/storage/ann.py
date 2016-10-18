@@ -66,7 +66,6 @@ class NearestNeighbours():
         return [(self.key_from_id[item], distance) for item, distance in
             zip(items, cosine_distances)]
 
-
     def _euclidean_from_cosine_distance(self, distance):
         # Annoy uses Euclidean distance of normalized vectors for its angular
         # distance, which for two vectors u,v is equal to sqrt(2(1-cos(u,v)))
