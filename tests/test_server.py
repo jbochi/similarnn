@@ -104,6 +104,14 @@ def test_delete_document(db):
     assert db.n_items == 0
 
 
+def test_get_document_without_arguments(db):
+    url = 'models/lda/documents'
+    response = hug.test.get(server, url)
+
+    assert '200 OK' == response.status
+    assert {} == response.data
+
+
 def test_get_vector_knn_documents(db):
     topics = np.array(range(10))
     db.add_item("doc1", topics)
