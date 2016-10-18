@@ -1,5 +1,6 @@
 .cache/
 .eggs/
 *.egg-info/
+htmlcov/
 *.pyc
 __pycache__
