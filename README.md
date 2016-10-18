@@ -13,6 +13,10 @@ Running
 
 Start it with `CONFIG_PATH=tests/data/config.toml hug -f similarnn/server.py`
 
+Better yet, use gunicorn:
+- `pip install unicorn`
+- `CONFIG_PATH=tests/data/config.toml gunicorn similarnn.server:__hug_wsgi__`
+
 
 Running tests
 -------------
