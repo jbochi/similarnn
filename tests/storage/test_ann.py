@@ -89,6 +89,12 @@ def test_item_knn_0_degrees():
     assert close(0, distance)
 
 
+def test_vector_with_no_index():
+    space = ann.NearestNeighbours(n_factors=2)
+    doc_and_distances = space.vector_knn([1, 1])
+    assert [] == doc_and_distances
+
+
 def test_vector_knn():
     space = ann.NearestNeighbours(n_factors=2)
     space.add_item("doc1", [-1, -1])

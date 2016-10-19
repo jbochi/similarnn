@@ -49,6 +49,8 @@ class NearestNeighbours():
 
     def vector_knn(self, vector, k=10):
         "Returns K nearest neighbours from vector"
+        if self.index is None:
+            return []
         items, distances = self.index.get_nns_by_vector(vector,
                                                         n=k,
                                                         include_distances=True)
