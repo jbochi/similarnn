@@ -90,11 +90,11 @@ def delete_document(model, response, document_id):
 
 @hug.get('/models/{model}/documents/{document_id}/similar')
 @validate_model
-def similar_documents(model, response, document_id):
+def similar_documents(model, response, document_id, k: hug.types.number=10):
     """Get similar documents"""
     storage = get_model_db(model)
     try:
-        return _similar_json(storage.item_knn(document_id))
+        return _similar_json(storage.item_knn(document_id, k=k))
     except KeyError:
         response.status = hug.HTTP_NOT_FOUND
         return {

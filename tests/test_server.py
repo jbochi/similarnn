@@ -81,6 +81,18 @@ def test_get_similar_documents(db):
     assert 0 == response.data['similar'][0]['distance']
 
 
+def test_get_k_similar_documents(db):
+    topics = np.array(range(10))
+    for i in range(20):
+        db.add_item("doc{i}".format(i=i), topics)
+
+    response = hug.test.get(server,
+                            'models/lda/documents/doc1/similar',
+                            {"k": "5"})
+    assert '200 OK' == response.status
+    assert 5 == len(response.data['similar'])
+
+
 def test_delete_all_documents(db):
     topics = np.array(range(10))
     db.add_item("doc1", topics)
