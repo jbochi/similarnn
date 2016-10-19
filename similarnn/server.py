@@ -50,12 +50,12 @@ def delete_all_documents(model, response, **kwargs):
 
 @hug.get('/models/{model}/documents')
 @validate_model
-def vector_knn_documents(model, response, **kwargs):
+def vector_knn_documents(model, response, vector=None):
     """Get vector KNN documents"""
     storage = get_model_db(model)
-    if 'vector' not in kwargs:
+    if vector is None:
         return {}
-    vector = map(float, kwargs['vector'].split(","))
+    vector = map(float, vector.split(","))
     return _similar_json(storage.vector_knn(vector))
 
 
