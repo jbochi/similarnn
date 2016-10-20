@@ -1,28 +1,30 @@
 import gensim
+import os
 import toml
 
 from similarnn.models import LDAModel
 
 
-def load_dictionaries(config):
+def load_dictionaries(config, dirname=''):
     dictionaries = {}
     for name, attributes in config["dictionaries"].items():
-        path = attributes['path']
+        path = os.path.join(dirname, attributes['path'])
         dictionaries[name] = gensim.corpora.Dictionary.load_from_text(path)
     return dictionaries
 
 
-def load_corpora(config):
+def load_corpora(config, dirname=''):
     corpora = {}
     for name, attributes in config["corpora"].items():
-        corpora[name] = gensim.corpora.MmCorpus(attributes["path"])
+        path = os.path.join(dirname, attributes['path'])
+        corpora[name] = gensim.corpora.MmCorpus(path)
     return corpora
 
 
-def load_models(config):
+def load_models(config, dirname=''):
     models = {}
     for model, attributes in config["models"].items():
-        path = attributes['path']
+        path = os.path.join(dirname, attributes['path'])
         dictionary = config['dictionaries'][attributes['dictionary']]
         corpus = config['corpora'][attributes['corpus']]
         models[model] = LDAModel(model, path, dictionary, corpus)
@@ -32,7 +34,8 @@ def load_models(config):
 def load_config(config_path):
     with open(config_path) as f:
         config = toml.load(f)
-    config['dictionaries'] = load_dictionaries(config)
-    config['corpora'] = load_corpora(config)
-    config['models'] = load_models(config)
+    dirname = os.path.dirname(config_path)
+    config['dictionaries'] = load_dictionaries(config, dirname)
+    config['corpora'] = load_corpora(config, dirname)
+    config['models'] = load_models(config, dirname)
     return config
