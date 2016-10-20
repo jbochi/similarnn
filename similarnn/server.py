@@ -3,10 +3,11 @@ import hug
 import os
 
 from similarnn.config import load_config
-from similarnn.storage import get_model_db
+from similarnn.storage import Storage
 
 
 config = load_config(os.environ.get("CONFIG_PATH", "config.toml"))
+storage = Storage()
 
 
 def validate_model(f):
@@ -35,8 +36,8 @@ def create_document(model, response, **kwargs):
     """Adds document and returns the number of topics in a model"""
     document = kwargs
     vector = model.infer_topics(document=document)
-    storage = get_model_db(model)
-    storage.add_item(str(document['id']), vector)
+    db = storage.get_model_db(model)
+    db.add_item(str(document['id']), vector)
     return vector.tolist()
 
 
@@ -44,28 +45,28 @@ def create_document(model, response, **kwargs):
 @validate_model
 def delete_all_documents(model, response, **kwargs):
     """Removes all documents"""
-    storage = get_model_db(model)
-    storage.clean()
+    db = storage.get_model_db(model)
+    db.clean()
 
 
 @hug.get('/models/{model}/documents')
 @validate_model
 def vector_knn_documents(model, response, vector=None):
     """Get vector KNN documents"""
-    storage = get_model_db(model)
+    db = storage.get_model_db(model)
     if vector is None:
         return {}
     vector = map(float, vector.split(","))
-    return _similar_json(storage.vector_knn(vector))
+    return _similar_json(db.vector_knn(vector))
 
 
 @hug.get('/models/{model}/documents/{document_id}')
 @validate_model
 def get_document(model, response, document_id):
     """Get document vector"""
-    storage = get_model_db(model)
+    db = storage.get_model_db(model)
     try:
-        vector = storage.item_vector(document_id)
+        vector = db.item_vector(document_id)
         return vector.tolist()
     except KeyError:
         response.status = hug.HTTP_NOT_FOUND
@@ -78,9 +79,9 @@ def get_document(model, response, document_id):
 @validate_model
 def delete_document(model, response, document_id):
     """Removes document by id"""
-    storage = get_model_db(model)
+    db = storage.get_model_db(model)
     try:
-        storage.remove_item(str(document_id))
+        db.remove_item(str(document_id))
     except KeyError:
         response.status = hug.HTTP_NOT_FOUND
         return {
@@ -92,9 +93,9 @@ def delete_document(model, response, document_id):
 @validate_model
 def similar_documents(model, response, document_id, k: hug.types.number=10):
     """Get similar documents"""
-    storage = get_model_db(model)
+    db = storage.get_model_db(model)
     try:
-        return _similar_json(storage.item_knn(document_id, k=k))
+        return _similar_json(db.item_knn(document_id, k=k))
     except KeyError:
         response.status = hug.HTTP_NOT_FOUND
         return {

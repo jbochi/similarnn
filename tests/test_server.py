@@ -3,7 +3,6 @@ import numpy as np
 import os
 import pytest
 
-from similarnn.storage import get_model_db
 
 try:
     os.environ['CONFIG_PATH'] = 'tests/data/config.toml'
@@ -14,7 +13,7 @@ except:
 
 @pytest.fixture
 def db():
-    db = get_model_db(server.config['models']['lda'])
+    db = server.storage.get_model_db(server.config['models']['lda'])
     db.clean()
     return db
 
@@ -36,7 +35,7 @@ def test_post_documents_model_not_found():
 
 
 def test_post_documents():
-    db = get_model_db(server.config['models']['lda'])
+    db = server.storage.get_model_db(server.config['models']['lda'])
     assert db.n_items == 0
 
     url = "models/lda/documents"
