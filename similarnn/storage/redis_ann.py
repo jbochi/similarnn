@@ -1,14 +1,20 @@
+from threading import Timer
 import pickle
+
 
 from .ann import NearestNeighbours
 
 
 class RedisNearestNeighbours(NearestNeighbours):
-    def __init__(self, n_factors, redis_conn, namespace, **kwargs):
+    def __init__(self, n_factors, redis_conn, namespace,
+                 sync_interval=None, **kwargs):
         super().__init__(n_factors, **kwargs)
         self.redis_conn = redis_conn
         self.namespace = namespace
         self.sync()
+        if sync_interval:
+            self.sync_interval = sync_interval
+            self._create_timer()
 
     def add_item(self, key, vector):
         self._set_key_on_redis(key, vector)
@@ -42,3 +48,16 @@ class RedisNearestNeighbours(NearestNeighbours):
     def _keys_from_redis(self):
         for key, vector in self.redis_conn.hgetall(self.namespace).items():
             yield key.decode('utf-8'), pickle.loads(vector)
+
+    def _create_timer(self):
+        self.timer = Timer(self.sync_interval, self._sync_if_needed)
+        self.timer.start()
+
+    def _sync_if_needed(self):
+        if not self.is_synced():
+            self.sync()
+        self._create_timer()
+
+    def _stop_sync(self):
+        if self.timer:
+            self.timer.cancel()

@@ -1,5 +1,6 @@
-import redis
 import pytest
+import redis
+import time
 
 from similarnn.storage.redis_ann import RedisNearestNeighbours
 
@@ -29,6 +30,17 @@ def test_items_are_persisted(redis_conn):
                                    redis_conn=redis_conn,
                                    namespace=NAMESPACE)
     assert 3 == space.n_items
+
+
+def test_multiple_spaces_do_not_collide(redis_conn):
+    space1 = RedisNearestNeighbours(n_factors=2,
+                                    redis_conn=redis_conn,
+                                    namespace=NAMESPACE)
+    space1.add_item("doc1", [0, 1])
+    space2 = RedisNearestNeighbours(n_factors=2,
+                                    redis_conn=redis_conn,
+                                    namespace='another_namespace')
+    assert 0 == space2.n_items
 
 
 def test_items_are_removed(redis_conn):
@@ -99,3 +111,23 @@ def test_sync(redis_conn):
     assert space1.is_synced()
     assert 1 == space1.n_items
     assert [1, 1] == space1.item_vector("doc2")
+
+
+def test_syncs_automatically(redis_conn):
+    space1 = RedisNearestNeighbours(n_factors=2,
+                                    redis_conn=redis_conn,
+                                    namespace=NAMESPACE)
+
+    space2 = RedisNearestNeighbours(n_factors=2,
+                                    redis_conn=redis_conn,
+                                    namespace=NAMESPACE,
+                                    sync_interval=0.1)
+
+    time.sleep(0.2)
+    space1.add_item("doc1", [0, 1])
+    assert not space2.is_synced()
+
+    time.sleep(0.2)
+    assert space2.is_synced()
+    space2._stop_sync()
+    del space2
