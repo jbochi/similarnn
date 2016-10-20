@@ -2,6 +2,7 @@ import gensim
 
 from similarnn import config
 from similarnn import models
+from similarnn import storage
 
 
 def test_load_dictionaries():
@@ -47,6 +48,23 @@ def test_load_models():
     assert isinstance(loaded_models["model"], models.LDAModel)
 
 
+def test_load_storage():
+    loaded_storage = config.load_storage({
+        "storage": {
+            "type": "RedisStorage",
+            "sync_interval": 0.5
+        }
+    })
+    assert isinstance(loaded_storage, storage.RedisStorage)
+    assert 0.5 == loaded_storage.sync_interval
+
+
+def test_load_storage_with_no_config():
+    loaded_storage = config.load_storage({})
+    assert isinstance(loaded_storage, storage.MemoryStorage)
+
+
 def test_load_config():
     loaded_config = config.load_config("tests/data/config.toml")
+    assert isinstance(loaded_config['storage'], storage.MemoryStorage)
     assert isinstance(loaded_config['models']['lda'], models.LDAModel)

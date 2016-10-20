@@ -1,3 +1,6 @@
+[storage]
+  type = "MemoryStorage"
+
 [dictionaries]
   [dictionaries.default_dictionary]
   path = "model/dictionary.dict"

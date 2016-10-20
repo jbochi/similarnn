@@ -1,4 +1,4 @@
-from similarnn.storage import Storage, RedisStorage
+from similarnn.storage import MemoryStorage, RedisStorage
 
 
 class DummyModel(object):
@@ -7,7 +7,7 @@ class DummyModel(object):
 
 
 def test_storage():
-    s = Storage()
+    s = MemoryStorage()
     model = DummyModel()
     db = s.get_model_db(model)
 

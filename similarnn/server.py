@@ -3,11 +3,9 @@ import hug
 import os
 
 from similarnn.config import load_config
-from similarnn.storage import Storage
-
 
 config = load_config(os.environ.get("CONFIG_PATH", "config.toml"))
-storage = Storage()
+storage = config['storage']
 
 
 def validate_model(f):
