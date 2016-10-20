@@ -1,7 +1,7 @@
 import math
 import pytest
 
-from similarnn.storage import ann
+from similarnn.storage.ann import NearestNeighbours
 
 
 def close(a, b, tol=1e-3):
@@ -9,7 +9,7 @@ def close(a, b, tol=1e-3):
 
 
 def test_n_items():
-    space = ann.NearestNeighbours(n_factors=2)
+    space = NearestNeighbours(n_factors=2)
     assert 0 == space.n_items
 
     space.add_item("doc1", [0, 1])
@@ -19,7 +19,7 @@ def test_n_items():
 
 
 def test_clean():
-    space = ann.NearestNeighbours(n_factors=2)
+    space = NearestNeighbours(n_factors=2)
     space.add_item("doc1", [0, 1])
     space.add_item("doc2", [1, 0])
     space.add_item("doc3", [1, 1])
@@ -28,19 +28,19 @@ def test_clean():
 
 
 def test_item_vector():
-    space = ann.NearestNeighbours(n_factors=2)
+    space = NearestNeighbours(n_factors=2)
     space.add_item("doc1", [0, 1])
     assert [0, 1] == space.item_vector("doc1")
 
 
 def test_item_vector_unknown():
-    space = ann.NearestNeighbours(n_factors=2)
+    space = NearestNeighbours(n_factors=2)
     with pytest.raises(KeyError):
         space.item_vector("doc2")
 
 
 def test_item_knn():
-    space = ann.NearestNeighbours(n_factors=2)
+    space = NearestNeighbours(n_factors=2)
     space.add_item("doc1", [0, 1])
     space.add_item("doc2", [1, 0])
     space.add_item("doc3", [1, 1])
@@ -50,7 +50,7 @@ def test_item_knn():
 
 
 def test_item_knn_45_degrees():
-    space = ann.NearestNeighbours(n_factors=2)
+    space = NearestNeighbours(n_factors=2)
     space.add_item("doc1", [0, 1])
     space.add_item("doc2", [1, 0])
     space.add_item("doc3", [0.5, 0.5])
@@ -64,7 +64,7 @@ def test_item_knn_45_degrees():
 
 
 def test_item_knn_90_degrees():
-    space = ann.NearestNeighbours(n_factors=2)
+    space = NearestNeighbours(n_factors=2)
     space.add_item("doc1", [0, 1])
     space.add_item("doc2", [1, 0])
 
@@ -77,7 +77,7 @@ def test_item_knn_90_degrees():
 
 
 def test_item_knn_0_degrees():
-    space = ann.NearestNeighbours(n_factors=2)
+    space = NearestNeighbours(n_factors=2)
     space.add_item("doc1", [0, 1])
     space.add_item("doc2", [0, 1])
 
@@ -90,13 +90,13 @@ def test_item_knn_0_degrees():
 
 
 def test_vector_with_no_index():
-    space = ann.NearestNeighbours(n_factors=2)
+    space = NearestNeighbours(n_factors=2)
     doc_and_distances = space.vector_knn([1, 1])
     assert [] == doc_and_distances
 
 
 def test_vector_knn():
-    space = ann.NearestNeighbours(n_factors=2)
+    space = NearestNeighbours(n_factors=2)
     space.add_item("doc1", [-1, -1])
     space.add_item("doc2", [1, 0])
     space.add_item("doc3", [1, 1])
@@ -111,7 +111,7 @@ def test_vector_knn():
 
 
 def test_remove_item():
-    space = ann.NearestNeighbours(n_factors=2)
+    space = NearestNeighbours(n_factors=2)
     space.add_item("doc1", [0, 1])
     space.add_item("doc2", [1, 1])
     space.add_item("doc3", [1, 0])
@@ -134,13 +134,13 @@ def test_remove_item():
 
 
 def test_remove_item_unknown():
-    space = ann.NearestNeighbours(n_factors=2)
+    space = NearestNeighbours(n_factors=2)
     with pytest.raises(KeyError):
         space.remove_item("doc2")
 
 
 def test_update_vector():
-    space = ann.NearestNeighbours(n_factors=2)
+    space = NearestNeighbours(n_factors=2)
     space.add_item("doc1", [0, 1])
 
     space.add_item("doc2", [1, 0])

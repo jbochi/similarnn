@@ -1,6 +1,7 @@
 hug
 gensim
-nltk
 toml
 annoy
 gunicorn
+redis
+hiredis

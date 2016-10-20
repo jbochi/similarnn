@@ -1,7 +1,7 @@
 from annoy import AnnoyIndex
 
 
-class NearestNeighbours():
+class NearestNeighbours(object):
     def __init__(self, n_factors, n_trees=10):
         self.clean()
         self.n_factors = n_factors

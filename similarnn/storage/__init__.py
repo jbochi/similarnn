@@ -1,4 +1,5 @@
-from similarnn.storage.ann import NearestNeighbours
+from .ann import NearestNeighbours
+from .redis_ann import RedisNearestNeighbours
 
 
 class Storage(object):
@@ -13,3 +14,8 @@ class Storage(object):
 
     def _create_model_db(self, model):
         return NearestNeighbours(model.num_topics)
+
+
+class RedisStorage(Storage):
+    def _create_model_db(self, model):
+        return RedisNearestNeighbours(model.num_topics)
