@@ -16,7 +16,8 @@ class LDAModel():
     def infer_topics(self, document):
         bow = doc2bow(self.dictionary, document)
         sparse_topics = self.lda.get_document_topics(bow)
-        return gensim.matutils.sparse2full(sparse_topics, self.num_topics)
+        nparray = gensim.matutils.sparse2full(sparse_topics, self.num_topics)
+        return nparray.tolist()
 
 
 def doc2bow(dictionary, document):

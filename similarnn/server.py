@@ -36,7 +36,7 @@ def create_document(model, response, **kwargs):
     vector = model.infer_topics(document=document)
     db = storage.get_model_db(model)
     db.add_item(str(document['id']), vector)
-    return vector.tolist()
+    return vector
 
 
 @hug.delete('/models/{model}/documents')
@@ -65,7 +65,7 @@ def get_document(model, response, document_id):
     db = storage.get_model_db(model)
     try:
         vector = db.item_vector(document_id)
-        return vector.tolist()
+        return vector
     except KeyError:
         response.status = hug.HTTP_NOT_FOUND
         return {

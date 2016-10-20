@@ -125,6 +125,7 @@ def test_syncs_automatically(redis_conn):
 
     time.sleep(0.2)
     space1.add_item("doc1", [0, 1])
+    space1.add_item("doc2", [1, 1])
     assert not space2.is_synced()
 
     time.sleep(0.2)

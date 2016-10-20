@@ -54,7 +54,7 @@ def test_get_document_404():
 
 
 def test_get_document(db):
-    topics = np.array(range(10))
+    topics = list(range(10))
     db.add_item("doc1", topics)
 
     response = hug.test.get(server, 'models/lda/documents/doc1')
@@ -68,7 +68,7 @@ def test_get_similar_documents_404():
 
 
 def test_get_similar_documents(db):
-    topics = np.array(range(10))
+    topics = list(range(10))
     db.add_item("doc1", topics)
     db.add_item("doc2", topics)
 
@@ -81,7 +81,7 @@ def test_get_similar_documents(db):
 
 
 def test_get_k_similar_documents(db):
-    topics = np.array(range(10))
+    topics = list(range(10))
     for i in range(20):
         db.add_item("doc{i}".format(i=i), topics)
 
@@ -93,7 +93,7 @@ def test_get_k_similar_documents(db):
 
 
 def test_delete_all_documents(db):
-    topics = np.array(range(10))
+    topics = list(range(10))
     db.add_item("doc1", topics)
     db.add_item("doc2", topics)
 
@@ -110,7 +110,7 @@ def test_delete_document_404():
 
 
 def test_delete_document(db):
-    db.add_item("doc1", np.array(range(10)))
+    db.add_item("doc1", list(range(10)))
     response = hug.test.delete(server, 'models/lda/documents/doc1')
     assert '200 OK' == response.status
     assert db.n_items == 0
@@ -125,7 +125,7 @@ def test_get_document_without_arguments(db):
 
 
 def test_get_vector_knn_documents(db):
-    topics = np.array(range(10))
+    topics = list(range(10))
     db.add_item("doc1", topics)
 
     url = 'models/lda/documents'
