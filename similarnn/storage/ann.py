@@ -28,7 +28,7 @@ class NearestNeighbours():
         self._rebuild_index()
 
     def remove_item(self, key):
-        "Removes item"
+        "Removes an item"
         item_id = self.id_from_key[key]
         del self.key_from_id[item_id]
         new_ids = [(i, old_key) for i, (old_id, old_key) in enumerate(
