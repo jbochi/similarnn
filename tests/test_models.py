@@ -22,11 +22,11 @@ def test_lda_model(dictionary):
 def test_doc2bow(dictionary):
     document = {
         "id": "frango",
-        "body": "frango com arroz",
-        "title": "frango delicioso"
+        "body": "frango com arroz!!",
+        "title": "Frango, com arroz, é muito delicioso"
     }
     bow = dict(models.doc2bow(dictionary, document))
     words2ids = {v: k for k, v in dictionary.items()}
     assert 2 == len(bow)
     assert 2 == bow[words2ids["frango"]]
-    assert 1 == bow[words2ids["arroz"]]
+    assert 2 == bow[words2ids["arroz"]]

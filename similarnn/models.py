@@ -1,5 +1,5 @@
 import gensim
-import nltk
+import re
 
 
 class LDAModel():
@@ -21,5 +21,5 @@ class LDAModel():
 
 def doc2bow(dictionary, document):
     text = " ".join(v for k, v in document.items() if k != 'id')
-    words = nltk.word_tokenize(text)
+    words = re.findall("\w+", text.lower())
     return dictionary.doc2bow(words)
