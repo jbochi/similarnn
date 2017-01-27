@@ -6,6 +6,8 @@ Fast document similarity server using approximate nearest neighbors
 Installation
 ------------
 
+Requires Python3.
+
 Git clone and `pip install -r requirements.txt`
 
 Running
