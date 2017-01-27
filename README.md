@@ -25,6 +25,8 @@ Running tests
 
 Install dev dependencies: `pip install -r requirements-dev.txt`
 
+Redis should be available locally on default port 6139: `redis-server`
+
 Run `python setup.py test`
 
 To get a coverage report:
